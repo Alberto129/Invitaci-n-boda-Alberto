@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alberto & Fernanda — Nuestra Boda</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=Great+Vibes&family=Montserrat:wght@200;300;400;500;600&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'wedding-cream': '#FBF9F5',
+                        'wedding-beige': '#F3EFEA',
+                        'wedding-green': '#1A261D',
+                        'wedding-green-light': '#2D4030',
+                        'wedding-sage': '#A3B19B',
+                        'wedding-gold': '#D4AF37',
+                        'wedding-gold-dark': '#AA820A',
+                        'wedding-dark': '#1C241E',
+                        'wedding-gray': '#68726A'
+                    },
+                    fontFamily: {
+                        serif: ['"Cormorant Garamond"', 'serif'],
+                        script: ['"Great Vibes"', 'cursive'],
+                        sans: ['"Montserrat"', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-wedding-cream text-wedding-dark font-sans antialiased min-h-screen relative overflow-x-hidden">
+
+    <!-- Audio de Fondo -->
+    <audio id="bgMusic" loop preload="auto">
+        <source src="cancion.mp4" type="audio/mpeg">
+    </audio>
+
+    <!-- Botón Flotante de Música -->
+    <button id="musicToggleBtn" onclick="toggleMusic()" class="fixed top-5 right-5 z-50 bg-wedding-cream/90 backdrop-blur-md border border-wedding-gold/40 text-wedding-green p-3 rounded-full shadow-lg hover:scale-105 transition-all duration-300 flex items-center justify-center w-12 h-12">
+        <i id="musicIcon" class="fas fa-music text-wedding-gold"></i>
+    </button>
+
+    <!-- Botón Flotante de Confirmación (visible al abrir la invitación) -->
+    <button id="floatingRsvpBtn" onclick="goToRSVP()" class="hidden fixed bottom-6 right-5 z-50 bg-wedding-green/95 backdrop-blur-md border border-wedding-gold/60 text-wedding-cream px-5 py-3.5 rounded-full shadow-2xl hover:bg-wedding-green-light hover:scale-105 transition-all duration-300 flex items-center gap-2.5">
+        <i class="fab fa-whatsapp text-wedding-gold text-lg"></i>
+        <span class="font-sans font-semibold text-[11px] uppercase tracking-widest">Confirmar Asistencia</span>
+    </button>
+
+    <!-- ==================== PANTALLA INICIAL: PORTADA ==================== -->
+    <div id="welcomeScreen" class="fixed inset-0 z-40 bg-[#1A261D] flex flex-col items-center justify-center p-4 transition-opacity duration-1000">
+        <div class="text-center mb-6">
+            <span class="font-serif italic text-2xl tracking-widest text-wedding-sage block mb-2">Nos casamos</span>
+            <h1 class="font-script text-7xl sm:text-8xl md:text-9xl text-wedding-gold mt-1 drop-shadow-md">Alberto & Fernanda</h1>
+            <!-- Saludo personalizado dinámico por enlace (?to=...) -->
+            <div id="personalizedGuestContainer" class="hidden mt-4 px-4 py-2 bg-wedding-gold/10 border border-wedding-gold/30 rounded-full inline-block">
+                <span class="font-serif text-sm md:text-base text-wedding-cream italic">Invitación especial para: <strong id="guestNameDisplay" class="text-wedding-gold font-normal"></strong></span>
+            </div>
+        </div>
+
+        <!-- FOTO PM-80 -->
+        <div id="photoContainer" class="relative w-72 sm:w-80 md:w-96 h-80 md:h-96 rounded-xl shadow-2xl overflow-hidden border-2 border-wedding-gold/60 mb-8 cursor-pointer" onclick="openInvitation()">
+            <img src="PM-80.jpg" alt="Alberto & Fernanda" class="w-full h-full object-cover object-top">
+        </div>
+
+        <button id="openBtn" onclick="openInvitation()" class="px-8 py-3 bg-wedding-gold text-wedding-dark font-sans font-semibold text-xs uppercase tracking-widest rounded-full shadow-lg hover:bg-wedding-gold-dark hover:text-white transition-all duration-300 hover:scale-105">
+            Abrir Invitación
+        </button>
+    </div>
+
+    <!-- ==================== CONTENIDO PRINCIPAL ==================== -->
+    <div id="mainContent" class="opacity-0 transition-opacity duration-1000 min-h-screen">
+        
+        <!-- HERO SECTION -->
+        <section class="relative min-h-screen flex flex-col items-center justify-center text-center px-4 py-20 bg-wedding-cream">
+            <div class="max-w-2xl mx-auto space-y-6">
+                <div class="inline-block p-3 px-6 border-y border-wedding-gold/60 mb-2">
+                    <span class="font-serif text-xs md:text-sm uppercase tracking-[0.2em] text-wedding-green font-semibold">
+                        El amor escribió nuestra historia y queremos que seas parte de este hermoso capítulo
+                    </span>
+                </div>
+                
+                <h1 class="font-script text-6xl sm:text-7xl md:text-8xl text-wedding-green leading-tight">
+                    Alberto & Fernanda
+                </h1>
+
+                <p class="font-serif italic text-base md:text-lg text-wedding-dark max-w-lg mx-auto leading-relaxed px-2">
+                    "Su presencia hará aún más especial este día. Acompáñenos a celebrar el amor, brindar por la felicidad y disfrutar de una noche inolvidable."
+                </p>
+
+                <p class="font-serif italic text-sm md:text-base text-wedding-gray max-w-lg mx-auto">
+                    "Todo lo que hagan, háganlo con amor" 1 Corintios: 16;14 
+                </p>
+
+                <!-- FECHA DESTACADA -->
+                <div class="py-6 border-y border-wedding-gold/30 my-8 flex justify-around items-center max-w-md mx-auto">
+                    <div class="text-center">
+                        <span class="block font-serif text-xs uppercase tracking-widest text-wedding-gray mb-1">SÁBADO</span>
+                        <span class="block font-serif text-4xl text-wedding-green font-light">19</span>
+                    </div>
+                    <div class="text-center px-4 border-x border-wedding-gold/40">
+                        <span class="block font-serif text-xs uppercase tracking-widest text-wedding-gray mb-1">MES</span>
+                        <span class="block font-serif text-4xl text-wedding-green font-light">DIC</span>
+                    </div>
+                    <div class="text-center">
+                        <span class="block font-serif text-xs uppercase tracking-widest text-wedding-gray mb-1">AÑO</span>
+                        <span class="block font-serif text-4xl text-wedding-green font-light">2026</span>
+                    </div>
+                </div>
+
+                <div class="font-serif text-base text-wedding-gray">
+                    <p class="uppercase tracking-widest text-xs">Catacamas, Olancho</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- CONTADOR REGRESIVO -->
+        <section id="countdown" class="py-16 bg-wedding-green text-wedding-cream px-4 text-center">
+            <div class="max-w-4xl mx-auto">
+                <h2 class="font-serif text-xs uppercase tracking-[0.3em] text-wedding-sage mb-2">Sólo faltan</h2>
+                <h3 class="font-script text-4xl text-wedding-gold mb-8">Para nuestro gran día</h3>
+
+                <div class="grid grid-cols-4 gap-2 md:gap-6 max-w-xl mx-auto">
+                    <div class="bg-[#233327] p-4 rounded-xl shadow-inner border border-wedding-gold/30">
+                        <span id="days" class="block font-serif text-3xl md:text-5xl text-wedding-gold font-light">00</span>
+                        <span class="text-[10px] md:text-xs uppercase tracking-widest text-wedding-sage">Días</span>
+                    </div>
+                    <div class="bg-[#233327] p-4 rounded-xl shadow-inner border border-wedding-gold/30">
+                        <span id="hours" class="block font-serif text-3xl md:text-5xl text-wedding-gold font-light">00</span>
+                        <span class="text-[10px] md:text-xs uppercase tracking-widest text-wedding-sage">Horas</span>
+                    </div>
+                    <div class="bg-[#233327] p-4 rounded-xl shadow-inner border border-wedding-gold/30">
+                        <span id="minutes" class="block font-serif text-3xl md:text-5xl text-wedding-gold font-light">00</span>
+                        <span class="text-[10px] md:text-xs uppercase tracking-widest text-wedding-sage">Minutos</span>
+                    </div>
+                    <div class="bg-[#233327] p-4 rounded-xl shadow-inner border border-wedding-gold/30">
+                        <span id="seconds" class="block font-serif text-3xl md:text-5xl text-wedding-gold font-light">00</span>
+                        <span class="text-[10px] md:text-xs uppercase tracking-widest text-wedding-sage">Segundos</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- GALERÍA DE FOTOS -->
+        <section class="py-12 bg-wedding-beige px-4">
+            <div class="max-w-4xl mx-auto text-center">
+                <h2 class="font-serif text-xs uppercase tracking-[0.3em] text-wedding-gray mb-2">Recuerdos</h2>
+                <h3 class="font-script text-4xl text-wedding-green mb-10">Nuestros Momentos</h3>
+                
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 max-w-2xl mx-auto">
+                    <div class="overflow-hidden rounded-xl shadow-lg h-[420px] border-2 border-wedding-gold/30 bg-wedding-cream">
+                        <img src="PM-43.jpg" alt="Foto Novios 2" class="w-full h-full object-cover object-center hover:scale-105 transition-transform duration-500">
+                    </div>
+                    <div class="overflow-hidden rounded-xl shadow-lg h-[420px] border-2 border-wedding-gold/30 bg-wedding-cream">
+                        <img src="PM-114.jpg" alt="Foto Novios 4" class="w-full h-full object-cover object-center hover:scale-105 transition-transform duration-500">
+                    </div>
+                    <div class="overflow-hidden rounded-xl shadow-lg h-[420px] border-2 border-wedding-gold/30 bg-wedding-cream">
+                        <img src="PM-70.jpg" alt="Foto Novios 1" class="w-full h-full object-cover object-center hover:scale-105 transition-transform duration-500">
+                    </div>
+                    <div class="overflow-hidden rounded-xl shadow-lg h-[420px] border-2 border-wedding-gold/30 bg-wedding-cream">
+                        <img src="PM-82.jpg" alt="Foto Novios 3" class="w-full h-full object-cover object-center hover:scale-105 transition-transform duration-500">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CÓDIGO DE VESTIMENTA -->
+        <section class="py-12 px-4 bg-wedding-cream">
+            <div class="max-w-md mx-auto bg-wedding-beige p-8 rounded-xl border border-wedding-gold/30 text-center shadow-sm">
+                <div class="w-12 h-12 bg-wedding-cream rounded-full flex items-center justify-center mx-auto mb-3 text-wedding-gold text-xl border border-wedding-gold/30">
+                    <i class="fas fa-user-tie"></i>
+                </div>
+                <h4 class="font-serif text-2xl text-wedding-green mb-1">Código de Vestimenta</h4>
+                <p class="font-serif italic text-base text-wedding-gray mb-4">Formal</p>
+                <div class="pt-4 border-t border-wedding-gold/20 font-serif text-wedding-dark space-y-2">
+                    <p class="italic text-wedding-gold-dark font-semibold text-base">✨ Nota especial:</p>
+                    <p class="text-sm md:text-base leading-relaxed">El <strong>color blanco está reservado exclusivamente para la novia</strong>.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- CEREMONIA & RECEPCIÓN -->
+        <section class="py-16 px-4 bg-wedding-cream">
+            <div class="max-w-4xl mx-auto text-center mb-12">
+                <h3 class="font-script text-5xl text-wedding-green">Ceremonia</h3>
+            </div>
+
+            <div class="max-w-4xl mx-auto grid md:grid-cols-2 gap-8">
+                <!-- CEREMONIA -->
+                <div class="bg-wedding-beige p-8 rounded-2xl text-center border border-wedding-gold/30 shadow-sm flex flex-col justify-between">
+                    <div>
+                        <div class="w-16 h-16 bg-wedding-cream rounded-full flex items-center justify-center mx-auto mb-4 text-wedding-gold text-2xl shadow-inner border border-wedding-gold/30">
+                            <i class="fas fa-church"></i>
+                        </div>
+                        <h4 class="font-serif text-2xl text-wedding-green mb-2">Ceremonia Religiosa</h4>
+                        <div class="my-3 py-1 px-4 bg-wedding-cream border border-wedding-gold/40 rounded-full inline-block shadow-sm">
+                            <p class="font-serif font-semibold text-wedding-gold-dark text-2xl md:text-3xl tracking-wide"><i class="far fa-clock mr-1 text-wedding-gold text-xl"></i> 6:30 PM</p>
+                        </div>
+                        <h5 class="font-medium text-wedding-dark mt-2 mb-1 text-base">Parroquia Santo Tomás Apóstol</h5>
+                        <p class="text-sm text-wedding-gray font-serif mb-6">Catacamas, Olancho</p>
+                    </div>
+                    <a href="https://maps.app.goo.gl/LKrL8YMWFU5yPZVNA" target="_blank" class="inline-block w-full py-3 bg-wedding-green text-wedding-cream font-sans text-xs uppercase tracking-widest rounded-lg hover:bg-wedding-green-light transition-colors duration-300">
+                        <i class="fas fa-map-marker-alt mr-2 text-wedding-gold"></i> Ubicación
+                    </a>
+                </div>
+
+                <!-- RECEPCIÓN -->
+                <div class="bg-wedding-beige p-8 rounded-2xl text-center border border-wedding-gold/30 shadow-sm flex flex-col justify-between">
+                    <div>
+                        <div class="w-16 h-16 bg-wedding-cream rounded-full flex items-center justify-center mx-auto mb-4 text-wedding-gold text-2xl shadow-inner border border-wedding-gold/30">
+                            <i class="fas fa-glass-cheers"></i>
+                        </div>
+                        <h4 class="font-serif text-2xl text-wedding-green mb-2">Recepción & Fiesta</h4>
+                        <div class="my-3 py-2 px-4 bg-wedding-cream border border-wedding-gold/40 rounded-xl inline-block shadow-sm">
+                            <p class="font-serif italic text-wedding-gold-dark text-base md:text-lg tracking-wide font-medium">✨ Al finalizar la ceremonia religiosa</p>
+                        </div>
+                        <h5 class="font-medium text-wedding-dark mt-2 mb-1 text-base">Gimnasio Monseñor Bayron</h5>
+                        <p class="text-sm text-wedding-gray font-serif mb-6">Catacamas, Olancho</p>
+                    </div>
+                    <a href="https://maps.app.goo.gl/LKrL8YMWFU5yPZVNA" target="_blank" class="inline-block w-full py-3 bg-wedding-green text-wedding-cream font-sans text-xs uppercase tracking-widest rounded-lg hover:bg-wedding-green-light transition-colors duration-300">
+                        <i class="fas fa-map-marker-alt mr-2 text-wedding-gold"></i> Ubicación
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- FORMULARIO DE CONFIRMACIÓN (RSVP WHATSAPP) -->
+        <section id="rsvp" class="py-20 px-4 bg-wedding-cream">
+            <div class="max-w-xl mx-auto bg-wedding-beige p-8 md:p-12 rounded-2xl shadow-xl border border-wedding-gold/30 text-center">
+                <h2 class="font-serif text-xs uppercase tracking-[0.3em] text-wedding-gray mb-1">Confirma tu Asistencia</h2>
+                <p class="font-serif italic text-wedding-gold-dark font-semibold text-sm md:text-base mb-4 bg-wedding-gold/10 py-2 px-4 rounded-lg border border-wedding-gold/30">⚠️ Fecha límite de confirmación: 28 de Noviembre de 2026</p>
+                <h3 class="font-script text-5xl text-wedding-green mb-6">RSVP</h3>
+
+                <form id="rsvpForm" onsubmit="sendRSVP(event)" class="space-y-4 text-left">
+                    <div>
+                        <label class="block text-xs uppercase tracking-widest text-wedding-gray mb-1">Nombre Completo *</label>
+                        <input type="text" id="rsvpName" required placeholder="Ej. Carlos Mendoza" class="w-full px-4 py-3 bg-wedding-cream border border-wedding-gold/40 rounded-lg focus:outline-none focus:border-wedding-green text-sm font-serif">
+                    </div>
+
+                    <div>
+                        <label class="block text-xs uppercase tracking-widest text-wedding-gray mb-1">¿Asistirás? *</label>
+                        <select id="rsvpAttendance" required class="w-full px-4 py-3 bg-wedding-cream border border-wedding-gold/40 rounded-lg focus:outline-none focus:border-wedding-green text-sm font-serif">
+                            <option value="Sí, asistiré con mucho gusto">¡Sí, asistiré con mucho gusto!</option>
+                            <option value="Lamentablemente no podré asistir">Lamentablemente no podré asistir</option>
+                        </select>
+                    </div>
+
+                    <input type="hidden" id="editWhatsapp" value="4915116974661">
+
+                    <button type="submit" class="w-full py-4 bg-wedding-green text-wedding-cream font-sans font-semibold text-xs uppercase tracking-widest rounded-lg shadow-lg hover:bg-wedding-green-light transition-all duration-300 mt-4 flex items-center justify-center gap-2">
+                        <i class="fab fa-whatsapp text-lg text-wedding-gold"></i> Confirmar por WhatsApp
+                    </button>
+                </form>
+            </div>
+        </section>
+
+        <!-- FOOTER -->
+        <footer class="py-12 bg-wedding-green text-wedding-cream text-center border-t border-wedding-gold/30 pb-24">
+            <h3 class="font-script text-4xl text-wedding-gold mb-2">Alberto & Fernanda</h3>
+            <p class="font-serif text-xs uppercase tracking-widest text-wedding-sage">19 . 12 . 2026</p>
+        </footer>
+
+    </div>
+
+    <!-- JAVASCRIPT LOGIC -->
+    <script>
+        const bgMusic = document.getElementById('bgMusic');
+        const musicIcon = document.getElementById('musicIcon');
+        let isPlaying = false;
+
+        // Lector dinámico de invitados por URL (?to=...)
+        function checkGuestName() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const guest = urlParams.get('to');
+            if (guest) {
+                const decodedGuest = decodeURIComponent(guest);
+                document.getElementById('guestNameDisplay').innerText = decodedGuest;
+                document.getElementById('personalizedGuestContainer').classList.remove('hidden');
+                document.getElementById('rsvpName').value = decodedGuest;
+            }
+        }
+
+        function toggleMusic() {
+            if (isPlaying) {
+                bgMusic.pause();
+                musicIcon.classList.remove('fa-music');
+                musicIcon.classList.add('fa-volume-mute');
+                isPlaying = false;
+            } else {
+                bgMusic.play().then(() => {
+                    musicIcon.classList.remove('fa-volume-mute');
+                    musicIcon.classList.add('fa-music');
+                    isPlaying = true;
+                }).catch(() => console.log("Se requiere interacción para reproducir"));
+            }
+        }
+
+        function openInvitation() {
+            const welcomeScreen = document.getElementById('welcomeScreen');
+            const mainContent = document.getElementById('mainContent');
+            const floatingRsvpBtn = document.getElementById('floatingRsvpBtn');
+
+            bgMusic.play().then(() => {
+                isPlaying = true;
+                musicIcon.classList.remove('fa-volume-mute');
+                musicIcon.classList.add('fa-music');
+            }).catch(() => { isPlaying = false; });
+
+            welcomeScreen.classList.add('opacity-0');
+            setTimeout(() => {
+                welcomeScreen.style.display = 'none';
+                mainContent.classList.remove('opacity-0');
+                floatingRsvpBtn.classList.remove('hidden');
+            }, 1000);
+        }
+
+        // Desplaza suavemente al formulario y enfoca el campo de Nombre Completo
+        function goToRSVP() {
+            const rsvpSection = document.getElementById('rsvp');
+            const nameInput = document.getElementById('rsvpName');
+            
+            rsvpSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            setTimeout(() => {
+                nameInput.focus();
+            }, 600);
+        }
+
+        const targetDate = new Date('December 19, 2026 17:30:00').getTime();
+
+        function updateCountdown() {
+            const now = new Date().getTime();
+            const difference = targetDate - now;
+
+            if (difference > 0) {
+                const days = Math.floor(difference / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((difference % (1000 * 60)) / 1000);
+
+                document.getElementById('days').innerText = days < 10 ? '0' + days : days;
+                document.getElementById('hours').innerText = hours < 10 ? '0' + hours : hours;
+                document.getElementById('minutes').innerText = minutes < 10 ? '0' + minutes : minutes;
+                document.getElementById('seconds').innerText = seconds < 10 ? '0' + seconds : seconds;
+            }
+        }
+
+        setInterval(updateCountdown, 1000);
+        updateCountdown();
+        checkGuestName();
+
+        function sendRSVP(event) {
+            event.preventDefault();
+            
+            const name = document.getElementById('rsvpName').value;
+            const attendance = document.getElementById('rsvpAttendance').value;
+            const phoneNumber = document.getElementById('editWhatsapp').value;
+
+            let whatsappText = `¡Hola Alberto y Fernanda! ✨%0A%0AConfirmación de asistencia:%0A`;
+            whatsappText += `👤 *Nombre:* ${encodeURIComponent(name)}%0A`;
+            whatsappText += `💌 *Asistencia:* ${encodeURIComponent(attendance)}%0A`;
+
+            window.open(`https://api.whatsapp.com/send?phone=${phoneNumber}&text=${whatsappText}`, '_blank');
+        }
+    </script>
+</body>
+</html>
